@@ -173,7 +173,7 @@ namespace System.Linq.Dynamic.Tests
             var expected = _context.Posts.Where(x => x.PostDate > utcNow).ToArray();
 
             //Act
-            var test = _context.Posts.Where("PostDate > @0", utcNow).ToDynamicArray();
+            var test = _context.Posts.Where("PostDate > @0", utcNow.ToString("u")).ToDynamicArray();
             
             //Assert
             CollectionAssert.AreEqual(expected, test);
@@ -189,7 +189,7 @@ namespace System.Linq.Dynamic.Tests
             var expected = _context.Posts.Where(x => x.PostDate > utcNow).ToArray();
 
             //Act
-            var test = _context.Posts.Where("PostDate > DateTime(\"" + utcNow + "\")").ToDynamicArray();
+            var test = _context.Posts.Where("PostDate > DateTime(\"" + utcNow.ToString("u") + "\")").ToDynamicArray();
 
             //Assert
             CollectionAssert.AreEqual(expected, test);
@@ -205,7 +205,7 @@ namespace System.Linq.Dynamic.Tests
             var expected = _context.Posts.Where(x => x.PostDate > utcNow).ToArray();
 
             //Act
-            var test = _context.Posts.Where("PostDate > DateTime\"" + utcNow + "\"").ToDynamicArray();
+            var test = _context.Posts.Where("PostDate > DateTime\"" + utcNow.ToString("u") + "\"").ToDynamicArray();
 
             //Assert
             CollectionAssert.AreEqual(expected, test);
