@@ -1,4 +1,13 @@
 # About
+[SPy] - This fork of the library looks to address a need for being able to Select a static type from a Dynamic expression as noted in the following StackOverflow articles:
+
+https://stackoverflow.com/questions/1465700/system-linq-dynamic-select-new-into-a-listt-or-any-other-enumerabl
+
+https://stackoverflow.com/questions/44915453/select-clause-using-system-linq-dynamic-is-returning-expected-fault
+
+This implementation comes from a contribution from dahlbyk on the first link. Not sure why none of the forks to date appear to have implemented this option, but here you go.
+
+From meatGUY - 
 As far as I know the history is somewhat similar to this.
 
 This project takes his beggining as .NET 3.5 library created by Microsoft for some reason - if I am not mistaken there should be some articles in the MSDN Magazine at least about a parser engine that is used here.
