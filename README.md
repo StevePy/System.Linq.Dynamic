@@ -1,6 +1,8 @@
 # About
 [SPy] - This fork of the library looks to address a need for being able to Select a static type from a Dynamic expression as noted in the following StackOverflow articles:
+
 https://stackoverflow.com/questions/1465700/system-linq-dynamic-select-new-into-a-listt-or-any-other-enumerabl
+
 https://stackoverflow.com/questions/44915453/select-clause-using-system-linq-dynamic-is-returning-expected-fault
 
 This implementation comes from a contribution from dahlbyk on the first link. Not sure why none of the forks to date appear to have implemented this option, but here you go.
