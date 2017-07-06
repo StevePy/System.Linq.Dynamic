@@ -96,15 +96,41 @@ namespace System.Linq.Dynamic
                     source.Expression, Expression.Quote(lambda)));
         }
 
-        /// <summary>
-        /// Projects each element of a sequence to an <see cref="IQueryable"/> and combines the 
-        /// resulting sequences into one sequence.
-        /// </summary>
-        /// <param name="source">A sequence of values to project.</param>
-        /// <param name="selector">A projection string expression to apply to each element.</param>
-        /// <param name="args">An object array that contains zero or more objects to insert into the predicate as parameters. Similar to the way String.Format formats strings.</param>
-        /// <returns>An <see cref="IQueryable"/> whose elements are the result of invoking a one-to-many projection function on each element of the input sequence.</returns>
-        public static IQueryable SelectMany(this IQueryable source, string selector, params object[] args)
+		/// <summary>
+		/// Projects each element of a sequence into a static defined result type.
+		/// </summary>
+		/// <typeparam name="TResult">Type to project results as.</typeparam>
+		/// <param name="source">A sequence of values to project.</param>
+		/// <param name="selector">A projection string expression to apply to each element.</param>
+		/// <param name="args">An object array that contains zero or more objects to insert into the predicate as parameters.  Similar to the way String.Format formats strings.</param>
+		/// <returns>An <see cref="IQueryable"/> whose elements are the result of invoking a projection string on each element of source.</returns>
+		/// <example>
+		/// <code>
+		/// var staticObject = qry.Select&lt;TargetType&gt;("new (StringProperty1, StringProperty2 as OtherStringPropertyName)");
+		/// </code>
+		/// </example>
+		public static IQueryable<TResult> Select<TResult>(this IQueryable source, string selector, params object[] args)
+		{
+			Validate.Argument(source, "source").IsNotNull().Check()
+					.Argument(selector, "selector").IsNotNull().IsNotEmpty().IsNotWhiteSpace().Check();
+
+			LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(TResult), selector, args);
+			return source.Provider.CreateQuery<TResult>(
+				Expression.Call(
+					typeof(Queryable), "Select",
+					new Type[] { source.ElementType, typeof(TResult) },
+					source.Expression, Expression.Quote(lambda)));
+		}
+
+		/// <summary>
+		/// Projects each element of a sequence to an <see cref="IQueryable"/> and combines the 
+		/// resulting sequences into one sequence.
+		/// </summary>
+		/// <param name="source">A sequence of values to project.</param>
+		/// <param name="selector">A projection string expression to apply to each element.</param>
+		/// <param name="args">An object array that contains zero or more objects to insert into the predicate as parameters. Similar to the way String.Format formats strings.</param>
+		/// <returns>An <see cref="IQueryable"/> whose elements are the result of invoking a one-to-many projection function on each element of the input sequence.</returns>
+		public static IQueryable SelectMany(this IQueryable source, string selector, params object[] args)
         {
             Validate.Argument(source, "source").IsNotNull().Check()
                     .Argument(selector, "selector").IsNotNull().IsNotEmpty().IsNotWhiteSpace().Check();

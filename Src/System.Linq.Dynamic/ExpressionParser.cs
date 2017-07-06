@@ -282,6 +282,7 @@ namespace System.Linq.Dynamic
         int _textLen;
         char _ch;
         Token _token;
+		Type parsedResultType;
 
         public ExpressionParser(ParameterExpression[] parameters, string expression, object[] values)
         {
@@ -337,6 +338,7 @@ namespace System.Linq.Dynamic
 
         public Expression Parse(Type resultType)
         {
+			parsedResultType = resultType;
             int exprPos = _token.pos;
             Expression expr = ParseExpression();
             if (resultType != null)
@@ -1022,7 +1024,7 @@ namespace System.Linq.Dynamic
             }
             ValidateToken(TokenId.CloseParen, Res.CloseParenOrCommaExpected);
             NextToken();
-            Type type = DynamicExpression.CreateClass(properties);
+            Type type = parsedResultType ?? DynamicExpression.CreateClass(properties);
             MemberBinding[] bindings = new MemberBinding[properties.Count];
             for (int i = 0; i < bindings.Length; i++)
                 bindings[i] = Expression.Bind(type.GetProperty(properties[i].Name), expressions[i]);
