@@ -69,7 +69,7 @@ namespace System.Linq.Dynamic.Tests
                         Blog = blog,
                         Title = String.Format("Blog {0} - Post {1}", i + 1, j + 1),
                         Content = "My Content",
-                        PostDate = DateTime.Today.AddDays(-Rnd.Next(0,100)).AddSeconds(Rnd.Next(0, 30000)),
+                        PostDate = DateTime.Today.AddDays(-Rnd.Next(1,100)).AddSeconds(Rnd.Next(0, 30000)),
                         PostGlobalId = Guid.NewGuid(),
                         NumberOfReads = Rnd.Next(0, 5000)
                     };
@@ -189,10 +189,10 @@ namespace System.Linq.Dynamic.Tests
             var expected = _context.Posts.Where(x => x.PostDate > utcNow).ToArray();
 
             //Act
-            var test = _context.Posts.Where("PostDate > DateTime(\"" + utcNow + "\")").ToDynamicArray();
+            var test = _context.Posts.Where("PostDate > DateTime(\"" + utcNow.ToString("u") + "\")").ToDynamicArray();
 
             //Assert
-            CollectionAssert.AreEqual(expected, test);
+            CollectionAssert.AreEqual(expected, test, string.Format("expected: {0} found: {1}", expected.Length, test.Length));
         }
 
         [TestMethod]
@@ -205,13 +205,13 @@ namespace System.Linq.Dynamic.Tests
             var expected = _context.Posts.Where(x => x.PostDate > utcNow).ToArray();
 
             //Act
-            var test = _context.Posts.Where("PostDate > DateTime\"" + utcNow + "\"").ToDynamicArray();
+            var test = _context.Posts.Where("PostDate > DateTime\"" + utcNow.ToString("u") + "\"").ToDynamicArray();
 
-            //Assert
-            CollectionAssert.AreEqual(expected, test);
-        }
+			//Assert
+			CollectionAssert.AreEqual(expected, test, string.Format("expected: {0} found: {1}", expected.Length, test.Length));
+		}
 
-        [TestMethod]
+		[TestMethod]
         public void Entities_Where_ByGuid_AsObject()
         {
             //Arrange
